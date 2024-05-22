@@ -4,12 +4,12 @@
 #     COMMIT: d5fecf30ba8011067b10cf51fede53a5ab6574e4
 
 # Parses arguments
-model_name_or_path=gpt2
-dataset_path=data/alpaca/train_conversation
-output_dir=output_models/finetune
-deepspeed_args="--master_port=11000"
+model_name_or_path=TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T
+dataset_path=data/openwebmath
+output_dir=output_models/openwebmath_test
+deepspeed_args="--master_port=14000"
 conversation_template=llama2
-
+WANDB_CACHE_DIR="/ssddata/ksshumab/wandb"
 # Safety related arguments
 trust_remote_code=0
 
@@ -53,23 +53,23 @@ project_dir=$(cd "$(dirname $0)"/..; pwd)
 log_dir=${project_dir}/log/${exp_id}
 mkdir -p ${output_dir} ${log_dir}
 
-deepspeed ${deepspeed_args} \
+CUDA_VISIBLE_DEVICES=0 deepspeed ${deepspeed_args} \
   examples/finetune.py \
     --model_name_or_path ${model_name_or_path} \
     --trust_remote_code ${trust_remote_code} \
     --dataset_path ${dataset_path} \
     --output_dir ${output_dir} --overwrite_output_dir \
     --conversation_template ${conversation_template} \
-    --num_train_epochs 0.01 \
+    --num_train_epochs 1 \
     --learning_rate 2e-5 \
     --disable_group_texts 1 \
-    --block_size 256 \
+    --block_size 2048 \
     --per_device_train_batch_size 1 \
-    --deepspeed configs/ds_config_zero3.json \
+    --deepspeed configs/ds_config_zero2_no_offload.json \
     --fp16 \
     --run_name finetune \
     --validation_split_percentage 0 \
-    --logging_steps 20 \
+    --logging_steps 1 \
     --do_train \
     --ddp_timeout 72000 \
     --save_steps 5000 \

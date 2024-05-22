@@ -220,6 +220,7 @@ INSTANCE_FIELDS_MAP = {
     "conversation": ["messages"], # system, tools and conversation_id are optional
     "float_only": ["value"],
     "image_text": ["images", "text"],
+    "tokenized": ["input_ids", "labels"]
 }
 
 CONVERSATION_ROLE_NAMES = {

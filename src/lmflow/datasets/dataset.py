@@ -36,6 +36,7 @@ DATASET_TYPES = [
     "text2text",
     "float_only",
     "image_text",
+    "tokenized"
 ]
 
 KEY_TYPE = "type"

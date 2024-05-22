@@ -233,16 +233,16 @@ class Finetuner(BaseTuner):
                 model.tokenizer, model.image_processor)
             lm_dataset = dataset
         else:
-            with finetuner_args.main_process_first(desc="dataset map tokenization"):
-                tokenized_dataset = model.tokenize(dataset)
-                if data_args.disable_group_texts:
-                    lm_dataset = tokenized_dataset
-                else:
-                    lm_dataset = self.group_text(
-                        tokenized_dataset,
-                        model_max_length=model.get_max_length(),
-                    )
-
+            # with finetuner_args.main_process_first(desc="dataset map tokenization"):
+            #     tokenized_dataset = model.tokenize(dataset)
+            #     if data_args.disable_group_texts:
+            #         lm_dataset = tokenized_dataset
+            #     else:
+            #         lm_dataset = self.group_text(
+            #             tokenized_dataset,
+            #             model_max_length=model.get_max_length(),
+            #         )
+            lm_dataset = dataset
         train_dataset = lm_dataset.get_backend_dataset()
         logger.info(f"Number of train samples: {len(train_dataset)}")
 
